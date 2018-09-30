@@ -1,0 +1,1 @@
+- Download prebuilt numpy wheel for python 3.7 ( numpy‑1.15.3+mkl‑cp37‑cp37m‑win_amd64.whl ) from https://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy and put the *.whl file in _dep/ directory, and rename it numpy.whl. This is used for building opencv and associated python implementation

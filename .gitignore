@@ -1,0 +1,5 @@
+qtpath.txt
+_install/*
+_tmp/*
+_dep/*.whl
+Qt

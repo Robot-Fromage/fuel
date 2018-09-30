@@ -1,0 +1,18 @@
+[submodule "static-cpython"]
+	path = static-cpython
+	url = https://github.com/Robot-Fromage/static-cpython
+[submodule "Rivet"]
+	path = Rivet
+	url = https://github.com/Robot-Fromage/Rivet
+[submodule "tinyxml2"]
+	path = tinyxml2
+	url = https://github.com/leethomason/tinyxml2
+[submodule "SFML"]
+	path = SFML
+	url = https://github.com/SFML/SFML
+[submodule "opencv"]
+	path = opencv
+	url = https://github.com/opencv/opencv
+[submodule "cpython"]
+	path = cpython
+	url = https://github.com/python/cpython

@@ -1,0 +1,1 @@
+"..\python.exe" "opencv_python_image.py"
