@@ -43,6 +43,59 @@ POPD
 chgcolor %CRESET%
 
 :::::::::::::::
+:: PATCH: We want to trim any reference to python, python2 or python3 in PATH before building python and OPENCV to avoid conflicts
+SET "BACKUP_PATH=%PATH%"
+SET "BACKUP_PYTHON=%PYTHON%"
+SET "BACKUP_PYTHON_PATH=%PYTHON_PATH%"
+SET "BACKUP_PYTHON_LIB=%PYTHON_LIB%"
+setlocal enabledelayedexpansion
+SET "NEW_PATH="
+
+SET SPYTHON3=\python3.exe
+SET PYTHON3=python3.exe
+SET SPYTHON2=\python2.exe
+SET PYTHON2=python2.exe
+SET SPYTHON=\python.exe
+SET PYTHON=python.exe
+
+for %%A in ("%BACKUP_PATH:;=";"%") do (
+    IF NOT %%A=="" (
+        set ENTRY=%%A
+        set ENTRY=!ENTRY:"=%!
+        IF EXIST !ENTRY!%SPYTHON3% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE IF EXIST !ENTRY!%PYTHON3% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE IF EXIST !ENTRY!%SPYTHON2% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE IF EXIST !ENTRY!%PYTHON2% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE IF EXIST !ENTRY!%SPYTHON% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE IF EXIST !ENTRY!%PYTHON% (
+            ECHO Removing !ENTRY! from PATH
+        ) ELSE (
+            REM If the path does not contain a python or python2 or python3, we keep it
+            SET NEW_PATH=!NEW_PATH!!ENTRY!;
+        )
+    )
+)
+
+(
+    endlocal
+    REM PATCH export out of local scope
+    SET "EXPORT_PATH=%NEW_PATH%"
+)
+
+REM Set new PATH without pythons
+SET PATH=%EXPORT_PATH%
+REM Tests, if a python is found we go to error
+ECHO Checking if python is cleared from PATH
+CALL python && goto :error
+CALL python2 && goto :error
+CALL python3 && goto :error
+
+:::::::::::::::
 :: Actual build commands for opencv_python cpython
 CALL "%EXTLIBS_DIR%\cpython\PCBuild\build.bat" -r -e -v -k -c Release    -p x64 -t Rebuild
 CALL "%EXTLIBS_DIR%\cpython\PCBuild\build.bat" -r -e -v -k -c Debug      -p x64 -t Rebuild
@@ -119,6 +172,15 @@ powershell -Command "(gc opencv_python3.vcxproj) -replace 'python37.lib', 'pytho
 POPD
 
 CALL cmake --build . --config Debug || goto :error
+
+
+:::::::::::::::
+:: BACKUP Python PATH
+SET PATH=%BACKUP_PATH%
+SET PYTHON=%BACKUP_PYTHON%
+SET PYTHON_PATH=%BACKUP_PYTHON_PATH%
+SET PYTHON_LIB=%BACKUP_PYTHON_LIB%
+
 
 :::::::::::::::
 :: Install OPENCV
