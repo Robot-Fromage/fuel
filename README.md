@@ -1,7 +1,7 @@
 # fuel
 Frequently Used External Libraries
 
-![alt text](https://github.com/Robot-Fromage/fuel/_res/com/fuel_100.png "fuel")
+![alt text](https://github.com/Robot-Fromage/fuel/blob/master/_res/com/fuel_100.png "fuel")
 
 ###### Featuring:
 		- glew
